@@ -1,0 +1,123 @@
+#!/bin/bash
+
+# Create the dots array
+declare -a dots
+
+# Resize the terminal window to fit the clock
+clear
+printf '\e[8;21;42t'
+
+# Get timestamp to trigger every second
+timestamp=$(date +"%H%M%S")
+
+# Start the clock
+while [ true ]; do
+	# Browse the time to update the dots
+	now=$(date +"%H%M%S")
+
+	# Compare now with timestamp, break if it's the same
+	if [ $now = $timestamp ]; then
+		sleep 0.5
+		continue
+	else
+		timestamp=$now
+	fi
+
+	for (( i=0; i<${#now}; i++ )); do
+		case ${now:$i:1} in
+			0)
+				dots[6 * 0 + $i]=$(echo "   ")
+				dots[6 * 1 + $i]=$(echo "   ")
+				dots[6 * 2 + $i]=$(echo "   ")
+				dots[6 * 3 + $i]=$(echo "   ")
+				;;
+			1)
+				dots[6 * 0 + $i]=$(echo "   ")
+				dots[6 * 1 + $i]=$(echo "   ")
+				dots[6 * 2 + $i]=$(echo "   ")
+				dots[6 * 3 + $i]=$(echo "@@@")
+				;;
+			2)
+				dots[6 * 0 + $i]=$(echo "   ")
+				dots[6 * 1 + $i]=$(echo "   ")
+				dots[6 * 2 + $i]=$(echo "@@@")
+				dots[6 * 3 + $i]=$(echo "   ")
+				;;
+			3)
+				dots[6 * 0 + $i]=$(echo "   ")
+				dots[6 * 1 + $i]=$(echo "   ")
+				dots[6 * 2 + $i]=$(echo "@@@")
+				dots[6 * 3 + $i]=$(echo "@@@")
+				;;
+			4)
+				dots[6 * 0 + $i]=$(echo "   ")
+				dots[6 * 1 + $i]=$(echo "@@@")
+				dots[6 * 2 + $i]=$(echo "   ")
+				dots[6 * 3 + $i]=$(echo "   ")
+				;;
+			5)
+				dots[6 * 0 + $i]=$(echo "   ")
+				dots[6 * 1 + $i]=$(echo "@@@")
+				dots[6 * 2 + $i]=$(echo "   ")
+				dots[6 * 3 + $i]=$(echo "@@@")
+				;;
+			6)
+				dots[6 * 0 + $i]=$(echo "   ")
+				dots[6 * 1 + $i]=$(echo "@@@")
+				dots[6 * 2 + $i]=$(echo "@@@")
+				dots[6 * 3 + $i]=$(echo "   ")
+				;;
+			7)
+				dots[6 * 0 + $i]=$(echo "   ")
+				dots[6 * 1 + $i]=$(echo "@@@")
+				dots[6 * 2 + $i]=$(echo "@@@")
+				dots[6 * 3 + $i]=$(echo "@@@")
+				;;
+			8)
+				dots[6 * 0 + $i]=$(echo "@@@")
+				dots[6 * 1 + $i]=$(echo "   ")
+				dots[6 * 2 + $i]=$(echo "   ")
+				dots[6 * 3 + $i]=$(echo "   ")
+				;;
+			9)
+				dots[6 * 0 + $i]=$(echo "@@@")
+				dots[6 * 1 + $i]=$(echo "   ")
+				dots[6 * 2 + $i]=$(echo "   ")
+				dots[6 * 3 + $i]=$(echo "@@@")
+				;;
+		esac
+	done
+
+	# Print the clock
+	echo ""
+	echo "         @@@           @@@           @@@  "
+	echo "        @${dots[1]}@         @${dots[3]}@         @${dots[5]}@ "
+	echo "        @${dots[1]}@         @${dots[3]}@         @${dots[5]}@ "
+	echo "         @@@           @@@           @@@  "
+	echo ""
+	echo "         @@@    @@@    @@@    @@@    @@@  "
+	echo "        @${dots[7]}@  @${dots[8]}@  @${dots[9]}@  @${dots[10]}@  @${dots[11]}@ "
+	echo "        @${dots[7]}@  @${dots[8]}@  @${dots[9]}@  @${dots[10]}@  @${dots[11]}@ "
+	echo "         @@@    @@@    @@@    @@@    @@@  "
+	echo ""
+	echo "  @@@    @@@    @@@    @@@    @@@    @@@  "
+	echo " @${dots[12]}@  @${dots[13]}@  @${dots[14]}@  @${dots[15]}@  @${dots[16]}@  @${dots[17]}@ "
+	echo " @${dots[12]}@  @${dots[13]}@  @${dots[14]}@  @${dots[15]}@  @${dots[16]}@  @${dots[17]}@ "
+	echo "  @@@    @@@    @@@    @@@    @@@    @@@  "
+	echo ""
+	echo "  @@@    @@@    @@@    @@@    @@@    @@@  "
+	echo " @${dots[18]}@  @${dots[19]}@  @${dots[20]}@  @${dots[21]}@  @${dots[22]}@  @${dots[23]}@ "
+	echo " @${dots[18]}@  @${dots[19]}@  @${dots[20]}@  @${dots[21]}@  @${dots[22]}@  @${dots[23]}@ "
+	echo "  @@@    @@@    @@@    @@@    @@@    @@@  "
+	
+	# Check for user input to stop the clock
+	read -t 0.25 -N 1 -s input 
+	if [ -n "$input" ]; then
+		# Clear the screen
+		clear
+		# Resize terminal to a "normal" size
+		printf '\e[8;30;120t'
+		# Close the clock
+		exit 1
+	fi
+done
